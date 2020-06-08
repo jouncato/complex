@@ -1,0 +1,19 @@
+sudo: required
+sevices:
+    - docker
+
+before_install:
+    -docker build -t jouncato/complex -f ./client/Dockerfile.dev .
+
+script:
+    - docker runjouncato/complex npm test -- --coverage
+
+after_sucess:
+    - docker built -t jouncato/complex ./client
+    - docker built -t jouncato/complex ./nginx
+    - docker built -t jouncato/complex ./server
+    - docker built -t jouncato/complex ./worker
+# login dentro de docker hub
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# push images dentro de docker hub
+- docker push jouncato/complex
