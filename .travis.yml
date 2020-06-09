@@ -19,3 +19,16 @@ after_sucess:
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 # push images dentro de docker hub
 - docker push jouncato/complex
+deploy:
+    provider: elasticbeanstalk
+    region: us-west-1
+    app: complex
+    env: Comples-env
+    bucket_name: nombre_bucket
+    bucket_path: context
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY # variables de entonro TRAVIS_CI
+    secret_access_key: 
+        secure: $AWS_SECRET_KEY # variables de entonro TRAVIS_CI
+
